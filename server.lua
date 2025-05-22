@@ -30,6 +30,7 @@ function FetchBackgroundImages()
                     if message then
                         if message.attachments and type(message.attachments) == 'table' and #message.attachments > 0 then
                             for _, attachment in ipairs(message.attachments) do
+                                -- V V V V V Updated Logic Block Starts Here V V V V V
                                 if attachment then
 
                                     local isImage = false -- Default to false
@@ -54,6 +55,7 @@ function FetchBackgroundImages()
                                         table.insert(foundImageUrls, attachmentUrl)
                                     end
                                 end
+                                -- ^ ^ ^ ^ ^ Updated Logic Block Ends Here ^ ^ ^ ^ ^
                             end
                         end
                         if message.embeds and type(message.embeds) == 'table' then
@@ -132,20 +134,12 @@ AddEventHandler('playerConnecting', function(playerName, setKickReason, deferral
     local serverProjectName = GetConvar('sv_projectName', 'RedM Server') -- Get the convar, provide a fallback name
     serverProjectName = serverProjectName:gsub('%^%d', '')
 
-    local videoList = Config.YouTubeVideoID
-    local randomYouTubeVideo = videoList[1]
-
-    if #videoList > 1 then
-        local randomIndex = math.random(1, #videoList)
-        randomYouTubeVideo = videoList[randomIndex]
-    end
-
     local handoverData = {
         playerName = connectingPlayerName,
         serverName = serverProjectName,
         logoUrl = Config.LogoURL,
         enableMusic = Config.EnableMusic,
-        youtubeVideoId = randomYouTubeVideo,
+        youtubeVideoIds = Config.YouTubeVideoID, -- randomYouTubeVideo,
         initialVolume = Config.InitialVolume,
         messages = Config.Messages,
         enableChangelog = Config.EnableChangelog,
