@@ -1,4 +1,3 @@
-
 local latestChangelogEntry = nil -- Stores the single latest entry { content, author, timestamp }
 local backgroundImageUrlList = {} -- Stores a list of image URLs for the background
 
@@ -7,7 +6,6 @@ function FetchBackgroundImages()
     if not Config.EnableDiscordBackgrounds then return end
 
     local botToken = Config.DiscordBotToken
-
     if not botToken or botToken == '' or botToken == 'YOUR_DISCORD_BOT_TOKEN_HERE' then
         return
     end
@@ -23,7 +21,6 @@ function FetchBackgroundImages()
         ['Content-Type'] = 'application/json'
     }
 
-
     PerformHttpRequest(url, function(errorCode, responseData, responseHeaders)
         if errorCode == 200 then
             local data = json.decode(responseData)
@@ -33,12 +30,12 @@ function FetchBackgroundImages()
                     if message then
                         if message.attachments and type(message.attachments) == 'table' and #message.attachments > 0 then
                             for _, attachment in ipairs(message.attachments) do
+                                -- V V V V V Updated Logic Block Starts Here V V V V V
                                 if attachment then
 
                                     local isImage = false -- Default to false
                                     local contentType = attachment.content_type or ''
                                     local attachmentUrl = attachment.url -- Store URL locally
-
                                     -- 1. Primary Check: Content Type (Simpler Substring Check)
                                     -- Check if the string starts with "image/"
                                     -- Add a length check first to prevent error if contentType is too short
@@ -50,18 +47,15 @@ function FetchBackgroundImages()
                                         if urlPath then
                                             if string.match(urlPath:lower(), '%.(jpe?g|png|gif|webp)$') then
                                                 isImage = true
-                                            else
                                             end
-                                        else
                                         end
                                     end
                                     -- Final Decision
                                     if isImage and attachmentUrl then
                                         table.insert(foundImageUrls, attachmentUrl)
-                                    else
                                     end
-                                else
                                 end
+                                -- ^ ^ ^ ^ ^ Updated Logic Block Ends Here ^ ^ ^ ^ ^
                             end
                         end
                         if message.embeds and type(message.embeds) == 'table' then
@@ -70,22 +64,17 @@ function FetchBackgroundImages()
                                 local imageUrl = embed.image.url
                                 if imageUrl:match("([^?]+)") and imageUrl:lower():match("%.jpe?g$") or imageUrl:lower():match("%.png$") or imageUrl:lower():match("%.gif$") or imageUrl:lower():match("%.webp$") then
                                     table.insert(foundImageUrls, imageUrl)
-                                else
                                 end
                             end
                         end
                     end
-                    else
                     end
                 end
                 -- Check if any URLs were actually found
                 if #foundImageUrls > 0 then
                     backgroundImageUrlList = foundImageUrls -- Replace the old list
-                else
                 end
-            else
             end
-        else
         end
     end, 'GET', '', headers)
 end
@@ -93,8 +82,7 @@ end
 function FetchLatestChangelog()
     if not Config.EnableChangelog then return end
 
-    local botToken = Config.DiscordBotToken
-
+    local botToken = Config.DiscordBotToken -- Direct from Config (Less Secure)
     if not botToken or botToken == '' or botToken == 'YOUR_DISCORD_BOT_TOKEN_HERE' then
         return
     end
@@ -108,7 +96,6 @@ function FetchLatestChangelog()
         ['Authorization'] = 'Bot ' .. botToken,
         ['Content-Type'] = 'application/json'
     }
-
 
     PerformHttpRequest(url, function(errorCode, responseData, responseHeaders)
         if errorCode == 200 then
@@ -133,7 +120,6 @@ function FetchLatestChangelog()
             else
                 latestChangelogEntry = nil -- Clear cache on parse failure or empty response
             end
-        else
         end
     end, 'GET', '', headers)
 end
@@ -149,7 +135,7 @@ AddEventHandler('playerConnecting', function(playerName, setKickReason, deferral
     serverProjectName = serverProjectName:gsub('%^%d', '')
 
     local videoList = Config.YouTubeVideoID
-    local randomYouTubeVideo = videoList[1]
+    local randomYouTubeVideo = videoList[1] -- valor por defecto
 
     if #videoList > 1 then
         local randomIndex = math.random(1, #videoList)
