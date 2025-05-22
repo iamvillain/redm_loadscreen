@@ -30,7 +30,6 @@ function FetchBackgroundImages()
                     if message then
                         if message.attachments and type(message.attachments) == 'table' and #message.attachments > 0 then
                             for _, attachment in ipairs(message.attachments) do
-                                -- V V V V V Updated Logic Block Starts Here V V V V V
                                 if attachment then
 
                                     local isImage = false -- Default to false
@@ -55,7 +54,6 @@ function FetchBackgroundImages()
                                         table.insert(foundImageUrls, attachmentUrl)
                                     end
                                 end
-                                -- ^ ^ ^ ^ ^ Updated Logic Block Ends Here ^ ^ ^ ^ ^
                             end
                         end
                         if message.embeds and type(message.embeds) == 'table' then
@@ -135,7 +133,7 @@ AddEventHandler('playerConnecting', function(playerName, setKickReason, deferral
     serverProjectName = serverProjectName:gsub('%^%d', '')
 
     local videoList = Config.YouTubeVideoID
-    local randomYouTubeVideo = videoList[1] -- valor por defecto
+    local randomYouTubeVideo = videoList[1]
 
     if #videoList > 1 then
         local randomIndex = math.random(1, #videoList)
