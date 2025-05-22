@@ -8,7 +8,6 @@ A simple RedM loading screen that uses the native method introduced in May 2024 
 
 **Current Status:** :construction: Actively Under Development
 
-**Call to Action:**
 *    **Important:** Please review the configuration and fill in the appropriate fields before starting.
 *   We are actively **accepting Pull Requests**!.
 
