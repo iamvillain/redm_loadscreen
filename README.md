@@ -1,4 +1,4 @@
-![redm_loadscreen](https://cdn.discordapp.com/attachments/1333812930810216581/1375020538333892689/image.png?ex=68302b2a&is=682ed9aa&hm=e02f39ae839c83eda101eae6d237c62759a2c71e7a851a4d07141efc3a0f2e08&format=webp&quality=lossless&width=1536&height=864 "redm_loadscreen")
+![redm_loadscreen](https://cdn.discordapp.com/attachments/1358059668777336852/1375101801291972678/image.png?ex=683076d9&is=682f2559&hm=d8c76f9c5d223a556e9d633300789021d376e93aa1c349b11aaeb9f9d99bd982&format=webp&quality=lossless&width=1536&height=864 "redm_loadscreen")
 
 # redm_loadscreen
 
