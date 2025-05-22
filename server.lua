@@ -148,8 +148,13 @@ AddEventHandler('playerConnecting', function(playerName, setKickReason, deferral
     local serverProjectName = GetConvar('sv_projectName', 'RedM Server') -- Get the convar, provide a fallback name
     serverProjectName = serverProjectName:gsub('%^%d', '')
 
-    local randomIndex = math.random(#Config.YouTubeVideoID)
-    local randomYouTubeVideo = Config.YouTubeVideoID[randomIndex]
+    local videoList = Config.YouTubeVideoID
+    local randomYouTubeVideo = videoList[1]
+
+    if #videoList > 1 then
+        local randomIndex = math.random(1, #videoList)
+        randomYouTubeVideo = videoList[randomIndex]
+    end
 
     local handoverData = {
         playerName = connectingPlayerName,
