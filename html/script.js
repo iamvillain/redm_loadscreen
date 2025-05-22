@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
         messages: ["Loading..."],
         enableChangelog: false,
         changelogTitle: "Updates",
-        changelogEntry: null, 
+        changelogEntry: null,
         enableDiscordBackgrounds: false,
         backgroundImageUrls: [],
         serverName: "RedM Server"
@@ -49,7 +49,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const BG_CHANGE_INTERVAL = 10000; // ms
 
     // --- Background Image Slideshow Functions ---
-
     function preloadImage(url) {
         return new Promise((resolve, reject) => {
             if (!url) {
@@ -114,7 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // startBackgroundSlideshow 
+    // *** UPDATED startBackgroundSlideshow Function ***
     function startBackgroundSlideshow() {
         if (bgInterval) clearInterval(bgInterval);
         bgInterval = null;
@@ -152,11 +151,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Failed to load the chosen initial background image
                 if(bgImage1) bgImage1.style.opacity = 0;
                 if(bgImage2) bgImage2.style.opacity = 0;
-                console.error("[LoadScreen] Failed to load initial random background:", error);
+                console.error("[LoadScreen DEBUG] Failed to load initial random background:", error);
                 // Maybe try starting the interval anyway to find another? Or just show nothing.
             });
     }
-
 
     // --- Random Message Functions ---
     function showRandomMessage() {
@@ -282,11 +280,10 @@ document.addEventListener('DOMContentLoaded', () => {
             if (changelogContainer) changelogContainer.style.display = 'none';
         }
 
-        // Apply Backgrounds
+        // *** Apply Backgrounds (Calculate validIndices here) ***
         backgroundUrls = CONFIG.backgroundImageUrls.filter(url => !!url); // Filter out any null/empty URLs first
         validIndices = backgroundUrls.map((url, index) => url ? index : -1).filter(index => index !== -1); // Calculate valid indices
         startBackgroundSlideshow(); // Initialize or restart the slideshow with random start
-
     }
 
     // --- YouTube Player Functions ---
@@ -333,7 +330,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function onPlayerError(event) {
-        console.error("YouTube Player Error:", event.data); 
+        console.error("YouTube Player Error:", event.data);
         musicReady = false;
         if(musicControls) musicControls.style.display = 'none';
     }
@@ -380,11 +377,10 @@ document.addEventListener('DOMContentLoaded', () => {
         volumeSlider.addEventListener('input', handleVolumeChange);
     }
 
-    // NUI Message Listener 
+    // NUI Message Listener
     window.addEventListener('message', (event) => {
         const data = event.data;
         if (!data || !data.eventName) return;
-
         let totalDataFileCount = 0; // Keep totals if needed for display
         let totalInitFuncCount = 0;
 
