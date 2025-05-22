@@ -7,13 +7,12 @@ document.addEventListener('DOMContentLoaded', () => {
         messages: ["Loading..."],
         enableChangelog: false,
         changelogTitle: "Updates",
-        changelogEntry: null, 
+        changelogEntry: null,
         enableDiscordBackgrounds: false,
         backgroundImageUrls: [],
         serverName: "RedM Server"
     };
 
-    // --- Element References ---
     const logoElement = document.getElementById('logo');
     const messageText = document.getElementById('message-text');
     const handoverName = document.getElementById('handover-name');
@@ -32,7 +31,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const bgImage1 = document.getElementById('bg-image-1');
     const bgImage2 = document.getElementById('bg-image-2');
 
-    // --- State Variables ---
     let messageInterval;
     let currentMessageIndex = -1;
     let player;
@@ -41,14 +39,12 @@ document.addEventListener('DOMContentLoaded', () => {
     let playerApiReady = false;
     let messagesToShow = CONFIG.messages;
     let backgroundUrls = [];
-    let validIndices = []; // <<< Keep track of valid image indices globally
+    let validIndices = [];
     let currentBgIndex = -1;
     let activeBgDiv = bgImage1;
     let inactiveBgDiv = bgImage2;
     let bgInterval = null;
-    const BG_CHANGE_INTERVAL = 10000; // ms
-
-    // --- Background Image Slideshow Functions ---
+    const BG_CHANGE_INTERVAL = 10000;
 
     function preloadImage(url) {
         return new Promise((resolve, reject) => {
@@ -59,7 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const img = new Image();
             img.onload = () => resolve(url);
             img.onerror = (err) => {
-                console.error("[LoadScreen] Image preload failed:", url, err); // Added logging
+                console.error("[LoadScreen] Image preload failed:", url, err);
                 reject(err);
             };
             img.src = url;
@@ -67,73 +63,48 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     async function changeBackground() {
-        // Use the globally available validIndices list
         if (!validIndices || validIndices.length < 2) {
             if (bgInterval) clearInterval(bgInterval);
             bgInterval = null;
             return;
         }
-
         let possibleNextIndices = validIndices.filter(index => index !== currentBgIndex);
         if (possibleNextIndices.length === 0) {
             possibleNextIndices = validIndices;
         }
-
-        // Pick a random index *from the list of possible (non-repeating) indices*
         const randomPossibleIndexPosition = Math.floor(Math.random() * possibleNextIndices.length);
         const nextIndex = possibleNextIndices[randomPossibleIndexPosition];
-
         const nextImageUrl = backgroundUrls[nextIndex];
-
-        // Safety check in case the URL at the selected index is somehow invalid
         if (!nextImageUrl) {
             console.error("[LoadScreen] Randomly selected next index resulted in invalid URL:", nextIndex);
-            // Don't update currentBgIndex, just wait for the next interval to try again.
             return;
         }
-
         try {
-            // Preload the *next* randomly selected image
             await preloadImage(nextImageUrl);
-
-            // Preload successful, start transition
             inactiveBgDiv.style.backgroundImage = `url('${nextImageUrl}')`;
             activeBgDiv.style.opacity = 0;
             inactiveBgDiv.style.opacity = 1;
-
-            // Swap roles for the next cycle
             const temp = activeBgDiv;
             activeBgDiv = inactiveBgDiv;
             inactiveBgDiv = temp;
-
-            // Update the current index to the one we just displayed
             currentBgIndex = nextIndex;
-
         } catch (error) {
             console.error("[LoadScreen] Skipping background change due to preload error:", error);
         }
     }
 
-    // startBackgroundSlideshow 
     function startBackgroundSlideshow() {
         if (bgInterval) clearInterval(bgInterval);
         bgInterval = null;
         currentBgIndex = -1;
-
-        // Use the globally calculated validIndices
         if (!CONFIG.enableDiscordBackgrounds || !bgImage1 || !bgImage2 || validIndices.length === 0) {
             if(bgImage1) bgImage1.style.opacity = 0;
             if(bgImage2) bgImage2.style.opacity = 0;
-            return; // Exit if disabled, elements missing, or no valid images
+            return;
         }
-
-        // --- Randomization Logic ---
         const randomValidIndexPosition = Math.floor(Math.random() * validIndices.length);
-        currentBgIndex = validIndices[randomValidIndexPosition]; // Set the starting index
-
+        currentBgIndex = validIndices[randomValidIndexPosition];
         const firstImageUrl = backgroundUrls[currentBgIndex];
-
-        // Preload and set the randomly chosen first image immediately
         preloadImage(firstImageUrl)
             .then(url => {
                 activeBgDiv = bgImage1;
@@ -142,23 +113,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 activeBgDiv.style.opacity = 1;
                 inactiveBgDiv.style.backgroundImage = '';
                 inactiveBgDiv.style.opacity = 0;
-
-                // If there's more than one *valid* image, start the interval timer for random cycling
                 if (validIndices.length > 1) {
                     bgInterval = setInterval(changeBackground, BG_CHANGE_INTERVAL);
                 }
             })
             .catch(error => {
-                // Failed to load the chosen initial background image
                 if(bgImage1) bgImage1.style.opacity = 0;
                 if(bgImage2) bgImage2.style.opacity = 0;
                 console.error("[LoadScreen] Failed to load initial random background:", error);
-                // Maybe try starting the interval anyway to find another? Or just show nothing.
             });
     }
 
-
-    // --- Random Message Functions ---
     function showRandomMessage() {
         if (!messagesToShow || messagesToShow.length === 0) return;
         let randomIndex;
@@ -170,26 +135,25 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => {
             messageText.textContent = messagesToShow[randomIndex];
             messageText.style.opacity = 1;
-        }, 500); // Fade-in time
+        }, 500);
     }
 
     function startMessageRotation() {
         stopMessageRotation();
         if (messagesToShow && messagesToShow.length > 0) {
-            showRandomMessage(); // Show first message immediately
-            messageInterval = setInterval(showRandomMessage, 4500); // Interval between messages
+            showRandomMessage();
+            messageInterval = setInterval(showRandomMessage, 4500);
         } else {
-            messageText.textContent = ""; // Clear if no messages
+            messageText.textContent = "";
         }
     }
 
     function stopMessageRotation() {
         clearInterval(messageInterval);
         messageInterval = null;
-        if(messageText) messageText.style.opacity = 0; // Fade out last message
+        if(messageText) messageText.style.opacity = 0;
     }
 
-    // --- Changelog Formatting ---
     function formatDiscordTimestamp(isoTimestamp) {
         if (!isoTimestamp) return '';
         try {
@@ -201,9 +165,47 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // --- Apply Handover Configuration ---
+    // NEW FUNCTION: Format Discord-like markdown to HTML
+    function formatDiscordToHtml(text) {
+        if (!text) return '';
+
+        const lines = text.split('\n');
+        let htmlOutput = '';
+        let inList = false;
+
+        for (let i = 0; i < lines.length; i++) {
+            let line = lines[i];
+            let processLine = line.trim();
+
+            line = line.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            line = line.replace(/(?<!\*)\*(?!\s|\*)(.*?)(?<!\s)\*(?!\*)/g, '<em>$1</em>');
+            line = line.replace(/_(.*?)_/g, '<em>$1</em>');
+            line = line.replace(/<@!?(\d+)>/g, (match, userId) => {
+                return `<span class="discord-mention" title="User ID: ${userId}">@User</span>`;
+            });
+
+            if (processLine.startsWith('- ')) {
+                if (!inList) {
+                    htmlOutput += '<ul>\n';
+                    inList = true;
+                }
+                let listItemContent = line.substring(line.indexOf('- ') + 2);
+                htmlOutput += '  <li>' + listItemContent + '</li>\n';
+            } else {
+                if (inList) {
+                    htmlOutput += '</ul>\n';
+                    inList = false;
+                }
+                htmlOutput += line + '\n';
+            }
+        }
+        if (inList) {
+            htmlOutput += '</ul>\n';
+        }
+        return htmlOutput.trim();
+    }
+
     function applyConfiguration(handoverData) {
-        // Update CONFIG with received data
         CONFIG.logoUrl = handoverData.logoUrl || CONFIG.logoUrl;
         CONFIG.enableMusic = handoverData.enableMusic !== undefined ? handoverData.enableMusic : CONFIG.enableMusic;
         CONFIG.youtubeVideoId = handoverData.youtubeVideoId || CONFIG.youtubeVideoId;
@@ -216,7 +218,6 @@ document.addEventListener('DOMContentLoaded', () => {
         CONFIG.backgroundImageUrls = handoverData.backgroundImageUrls || [];
         CONFIG.serverName = handoverData.serverName || CONFIG.serverName;
 
-        // Apply Player/Server Info
         if (handoverData.playerName && handoverName) handoverName.innerText = handoverData.playerName;
         if (handoverData.serverName && handoverAddress) {
             handoverAddress.innerText = handoverData.serverName;
@@ -224,7 +225,6 @@ document.addEventListener('DOMContentLoaded', () => {
             handoverAddress.innerText = "Unknown Server";
         }
 
-        // Apply Logo
         if (CONFIG.logoUrl && logoElement) {
             logoElement.src = CONFIG.logoUrl;
             logoElement.style.display = 'block';
@@ -232,11 +232,9 @@ document.addEventListener('DOMContentLoaded', () => {
             logoElement.style.display = 'none';
         }
 
-        // Apply Messages
         messagesToShow = CONFIG.messages;
         startMessageRotation();
 
-        // Apply Music
         if (CONFIG.enableMusic && CONFIG.youtubeVideoId) {
             if (musicControls) musicControls.style.display = 'flex';
             if (volumeSlider) volumeSlider.value = CONFIG.initialVolume;
@@ -246,7 +244,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (player && typeof player.stopVideo === 'function') player.stopVideo();
         }
 
-        // Apply Changelog
         if (CONFIG.enableChangelog && changelogContainer && changelogTitle && changelogEntries) {
             changelogTitle.innerText = CONFIG.changelogTitle;
             changelogEntries.innerHTML = '';
@@ -256,7 +253,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 entryDiv.className = 'changelog-entry';
                 const contentP = document.createElement('p');
                 contentP.className = 'changelog-content';
-                contentP.textContent = entry.content;
+                contentP.innerHTML = formatDiscordToHtml(entry.content);
                 const metaP = document.createElement('p');
                 metaP.className = 'changelog-meta';
                 const authorSpan = document.createElement('span');
@@ -282,14 +279,11 @@ document.addEventListener('DOMContentLoaded', () => {
             if (changelogContainer) changelogContainer.style.display = 'none';
         }
 
-        // Apply Backgrounds
-        backgroundUrls = CONFIG.backgroundImageUrls.filter(url => !!url); // Filter out any null/empty URLs first
-        validIndices = backgroundUrls.map((url, index) => url ? index : -1).filter(index => index !== -1); // Calculate valid indices
-        startBackgroundSlideshow(); // Initialize or restart the slideshow with random start
-
+        backgroundUrls = CONFIG.backgroundImageUrls.filter(url => !!url);
+        validIndices = backgroundUrls.map((url, index) => url ? index : -1).filter(index => index !== -1);
+        startBackgroundSlideshow();
     }
 
-    // --- YouTube Player Functions ---
     function createYouTubePlayer() {
          if (!CONFIG.enableMusic || !CONFIG.youtubeVideoId || !playerApiReady) return;
          if (player) {
@@ -333,12 +327,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function onPlayerError(event) {
-        console.error("YouTube Player Error:", event.data); 
+        console.error("YouTube Player Error:", event.data);
         musicReady = false;
         if(musicControls) musicControls.style.display = 'none';
     }
 
-    // --- Music Control Functions ---
     function toggleMusic() {
         if (!musicReady || !player || typeof player.playVideo !== 'function' || typeof player.pauseVideo !== 'function') return;
         musicShouldBePlaying = !musicShouldBePlaying;
@@ -371,7 +364,6 @@ document.addEventListener('DOMContentLoaded', () => {
          player.setVolume(newVolume);
     }
 
-    // --- Event Listeners ---
     if (musicControls && playIcon && pauseIcon) {
         playIcon.addEventListener('click', toggleMusic);
         pauseIcon.addEventListener('click', toggleMusic);
@@ -380,12 +372,11 @@ document.addEventListener('DOMContentLoaded', () => {
         volumeSlider.addEventListener('input', handleVolumeChange);
     }
 
-    // NUI Message Listener 
     window.addEventListener('message', (event) => {
         const data = event.data;
         if (!data || !data.eventName) return;
 
-        let totalDataFileCount = 0; // Keep totals if needed for display
+        let totalDataFileCount = 0;
         let totalInitFuncCount = 0;
 
         switch (data.eventName) {
@@ -412,7 +403,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if(logText) logText.innerText = `(0 / ${totalDataFileCount})`;
                 break;
             case 'onDataFileEntry':
-                if(logText) logText.innerText = `Loading: ${data.name}`; // Simplified log
+                if(logText) logText.innerText = `Loading: ${data.name}`;
                 break;
             case 'endDataFileEntries':
                  if(logText) logText.innerText = `Finished loading ${totalDataFileCount} data files.`;
@@ -430,7 +421,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if(logText) logText.innerText = `(0 / ${totalInitFuncCount})`;
                 break;
             case 'initFunctionInvoking':
-                 if(logText) logText.innerText = `Invoking: ${data.name}`; // Simplified log
+                 if(logText) logText.innerText = `Invoking: ${data.name}`;
                 break;
             case 'initFunctionInvoked':
                 break;
@@ -442,22 +433,18 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // --- Initial Setup ---
     if (window.nuiHandoverData) {
         applyConfiguration(window.nuiHandoverData);
     } else {
-        // Apply defaults initially
         if (CONFIG.logoUrl && logoElement) { logoElement.src = CONFIG.logoUrl; logoElement.style.display = 'block'; }
         if (handoverAddress) handoverAddress.innerText = CONFIG.serverName;
         startMessageRotation();
         if (changelogContainer) changelogContainer.style.display = 'none';
-        // Calculate valid indices based on default config (likely empty) and start slideshow
         validIndices = CONFIG.backgroundImageUrls.map((url, index) => url ? index : -1).filter(index => index !== -1);
         startBackgroundSlideshow();
     }
     updateMusicIcons();
 
-    // --- Cleanup on Page Unload ---
     window.addEventListener('unload', () => {
         stopMessageRotation();
         if (bgInterval) {
