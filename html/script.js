@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // --- Default Configuration ---
     let CONFIG = {
         logoUrl: "https://via.placeholder.com/150x50.png?text=Loading...",
         enableMusic: false,
@@ -8,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
         messages: ["Loading..."],
         enableChangelog: false,
         changelogTitle: "Updates",
-        changelogEntry: null, // Expect single object or null
+        changelogEntry: null, 
         enableDiscordBackgrounds: false,
         backgroundImageUrls: [],
         serverName: "RedM Server"
@@ -60,29 +59,22 @@ document.addEventListener('DOMContentLoaded', () => {
             const img = new Image();
             img.onload = () => resolve(url);
             img.onerror = (err) => {
-                console.error("[LoadScreen DEBUG] Image preload failed:", url, err); // Added logging
+                console.error("[LoadScreen] Image preload failed:", url, err); // Added logging
                 reject(err);
             };
             img.src = url;
         });
     }
 
-    // *** UPDATED changeBackground Function ***
     async function changeBackground() {
         // Use the globally available validIndices list
         if (!validIndices || validIndices.length < 2) {
-            // Stop cycling if less than 2 valid images exist
             if (bgInterval) clearInterval(bgInterval);
             bgInterval = null;
             return;
         }
 
-        // Create a list of potential next indices, excluding the current one
         let possibleNextIndices = validIndices.filter(index => index !== currentBgIndex);
-
-        // If filtering removed all options (only happens if validIndices had only 1 element,
-        // which is caught by the < 2 check, but this is a safe fallback), use the full valid list.
-        // This ensures it still changes *to* the single other image if only two are valid.
         if (possibleNextIndices.length === 0) {
             possibleNextIndices = validIndices;
         }
@@ -95,7 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Safety check in case the URL at the selected index is somehow invalid
         if (!nextImageUrl) {
-            console.error("[LoadScreen DEBUG] Randomly selected next index resulted in invalid URL:", nextIndex);
+            console.error("[LoadScreen] Randomly selected next index resulted in invalid URL:", nextIndex);
             // Don't update currentBgIndex, just wait for the next interval to try again.
             return;
         }
@@ -118,14 +110,11 @@ document.addEventListener('DOMContentLoaded', () => {
             currentBgIndex = nextIndex;
 
         } catch (error) {
-            // Log error, but don't update currentBgIndex if preload fails.
-            // This prevents getting stuck if a specific image URL becomes bad.
-            // The next interval will pick another random index.
-            console.error("[LoadScreen DEBUG] Skipping background change due to preload error:", error);
+            console.error("[LoadScreen] Skipping background change due to preload error:", error);
         }
     }
 
-    // *** UPDATED startBackgroundSlideshow Function ***
+    // startBackgroundSlideshow 
     function startBackgroundSlideshow() {
         if (bgInterval) clearInterval(bgInterval);
         bgInterval = null;
@@ -139,10 +128,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // --- Randomization Logic ---
-        // Pick a random index *from the list of valid indices*
         const randomValidIndexPosition = Math.floor(Math.random() * validIndices.length);
         currentBgIndex = validIndices[randomValidIndexPosition]; // Set the starting index
-        // --- End Randomization ---
 
         const firstImageUrl = backgroundUrls[currentBgIndex];
 
@@ -165,7 +152,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Failed to load the chosen initial background image
                 if(bgImage1) bgImage1.style.opacity = 0;
                 if(bgImage2) bgImage2.style.opacity = 0;
-                console.error("[LoadScreen DEBUG] Failed to load initial random background:", error);
+                console.error("[LoadScreen] Failed to load initial random background:", error);
                 // Maybe try starting the interval anyway to find another? Or just show nothing.
             });
     }
@@ -295,7 +282,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (changelogContainer) changelogContainer.style.display = 'none';
         }
 
-        // *** Apply Backgrounds (Calculate validIndices here) ***
+        // Apply Backgrounds
         backgroundUrls = CONFIG.backgroundImageUrls.filter(url => !!url); // Filter out any null/empty URLs first
         validIndices = backgroundUrls.map((url, index) => url ? index : -1).filter(index => index !== -1); // Calculate valid indices
         startBackgroundSlideshow(); // Initialize or restart the slideshow with random start
@@ -346,7 +333,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function onPlayerError(event) {
-        console.error("YouTube Player Error:", event.data); // Added logging
+        console.error("YouTube Player Error:", event.data); 
         musicReady = false;
         if(musicControls) musicControls.style.display = 'none';
     }
@@ -393,12 +380,11 @@ document.addEventListener('DOMContentLoaded', () => {
         volumeSlider.addEventListener('input', handleVolumeChange);
     }
 
-    // NUI Message Listener (from game client)
+    // NUI Message Listener 
     window.addEventListener('message', (event) => {
         const data = event.data;
         if (!data || !data.eventName) return;
 
-        // *** NOTE: Removed unused variables currentDataFileCount etc. for clarity ***
         let totalDataFileCount = 0; // Keep totals if needed for display
         let totalInitFuncCount = 0;
 
@@ -426,8 +412,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 if(logText) logText.innerText = `(0 / ${totalDataFileCount})`;
                 break;
             case 'onDataFileEntry':
-                // Update count directly in the log text if needed, e.g., using a counter variable
-                // For simplicity, just showing the name here
                 if(logText) logText.innerText = `Loading: ${data.name}`; // Simplified log
                 break;
             case 'endDataFileEntries':
@@ -446,7 +430,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 if(logText) logText.innerText = `(0 / ${totalInitFuncCount})`;
                 break;
             case 'initFunctionInvoking':
-                 // Update count directly in the log text if needed
                  if(logText) logText.innerText = `Invoking: ${data.name}`; // Simplified log
                 break;
             case 'initFunctionInvoked':
