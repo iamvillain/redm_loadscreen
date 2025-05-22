@@ -137,7 +137,7 @@ AddEventHandler('playerConnecting', function(playerName, setKickReason, deferral
         serverName = serverProjectName,
         logoUrl = Config.LogoURL,
         enableMusic = Config.EnableMusic,
-        youtubeVideoIds = Config.YouTubeVideoID, -- randomYouTubeVideo,
+        youtubeVideoIds = Config.YouTubeVideoID,
         initialVolume = Config.InitialVolume,
         messages = Config.Messages,
         enableChangelog = Config.EnableChangelog,
