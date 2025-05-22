@@ -165,43 +165,54 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // NEW FUNCTION: Format Discord-like markdown to HTML
+    // Format Discord-like markdown to HTML
     function formatDiscordToHtml(text) {
         if (!text) return '';
-
+    
         const lines = text.split('\n');
         let htmlOutput = '';
         let inList = false;
-
+    
         for (let i = 0; i < lines.length; i++) {
             let line = lines[i];
             let processLine = line.trim();
-
+    
+            // Apply Discord markdown formatting
             line = line.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
             line = line.replace(/(?<!\*)\*(?!\s|\*)(.*?)(?<!\s)\*(?!\*)/g, '<em>$1</em>');
             line = line.replace(/_(.*?)_/g, '<em>$1</em>');
             line = line.replace(/<@!?(\d+)>/g, (match, userId) => {
                 return `<span class="discord-mention" title="User ID: ${userId}">@User</span>`;
             });
-
+    
             if (processLine.startsWith('- ')) {
                 if (!inList) {
-                    htmlOutput += '<ul>\n';
+                    htmlOutput += '<ul>';
                     inList = true;
                 }
                 let listItemContent = line.substring(line.indexOf('- ') + 2);
-                htmlOutput += '  <li>' + listItemContent + '</li>\n';
+                htmlOutput += '<li>' + listItemContent + '</li>';
             } else {
                 if (inList) {
-                    htmlOutput += '</ul>\n';
+                    htmlOutput += '</ul>';
                     inList = false;
                 }
-                htmlOutput += line + '\n';
+                if (processLine.length > 0) {
+                    htmlOutput += line;
+                    if (i < lines.length - 1) {
+                        const nextLine = lines[i + 1].trim();
+                        if (!nextLine.startsWith('- ')) {
+                            htmlOutput += '<br>';
+                        }
+                    }
+                }
             }
         }
+        
         if (inList) {
-            htmlOutput += '</ul>\n';
+            htmlOutput += '</ul>';
         }
+        
         return htmlOutput.trim();
     }
 

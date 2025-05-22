@@ -254,19 +254,18 @@ body {
 .changelog-content {
     margin-bottom: 4px;
     line-height: 1.4;
-    white-space: pre-wrap;
     word-wrap: break-word;
 }
 
 .changelog-content ul {
-    margin-top: 0.5em;
-    margin-bottom: 0.5em;
+    margin-top: 0.2em;
+    margin-bottom: 0.2em;
     padding-left: 25px;
     list-style-position: outside;
 }
 
 .changelog-content li {
-    margin-bottom: 0.3em;
+    margin-bottom: 0;
 }
 
 .changelog-content strong {
