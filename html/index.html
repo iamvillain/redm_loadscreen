@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loading RedM Server...</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Background Image Containers -->
+    <div id="bg-image-1" class="background-image-layer"></div>
+    <div id="bg-image-2" class="background-image-layer"></div>
+
+    <!-- YouTube Player (Hidden) -->
+    <div id="youtube-player"></div>
+
+    <!-- Music Controls -->
+    <div id="music-controls" style="display: none;">
+        <i id="play-icon" class="fas fa-play" title="Play Music"></i>
+        <i id="pause-icon" class="fas fa-pause" title="Pause Music" style="display: none;"></i>
+        <span id="volume-control">
+             <i class="fas fa-volume-down"></i>
+             <input type="range" id="volume-slider" min="0" max="100" value="30" title="Volume">
+             <i class="fas fa-volume-up"></i>
+        </span>
+    </div>
+
+    <!-- Handover Info -->
+    <div id="handover-info">
+        <p>Welcome, <strong id="handover-name">Player</strong>!</p>
+        <p>Connecting to: <strong id="handover-address">Server Address</strong></p>
+    </div>
+
+    <!-- Main Loading Content -->
+    <div class="loading-container">
+        <img id="logo" src="" alt="Server Logo" style="display: none;">
+        <div id="random-messages">
+            <p id="message-text">Loading environment...</p>
+        </div>
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="progress-container">
+         <div id="progress-label">Overall Progress</div>
+         <progress id="loading-bar" value="0" max="1"></progress>
+         <span id="progress-percentage">0%</span>
+    </div>
+
+    <!-- Status Log -->
+    <div id="status-log-container">
+        <p><strong>Status:</strong> <span id="status-text">Initializing...</span></p>
+        <p><strong>Details:</strong> <span id="log-text">Waiting for connection...</span></p>
+    </div>
+
+    <!-- Changelog -->
+    <div id="changelog-container" style="display: none;">
+        <h3 id="changelog-title">Updates</h3>
+        <div id="changelog-entries">
+            <!-- Single changelog entry will be added here by JS -->
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script src="script.js"></script>
+</body>
+</html>
