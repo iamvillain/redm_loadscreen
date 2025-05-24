@@ -129,7 +129,6 @@ AddEventHandler('playerConnecting', function(playerName, setKickReason, deferral
     local source = source
     local connectingPlayerName = GetPlayerName(source) or playerName or "Player" -- Add fallback
 
-
     local serverProjectName = GetConvar('sv_projectName', 'RedM Server') -- Get the convar, provide a fallback name
     serverProjectName = serverProjectName:gsub('%^%d', '')
 
@@ -137,7 +136,7 @@ AddEventHandler('playerConnecting', function(playerName, setKickReason, deferral
         playerName = connectingPlayerName,
         serverName = serverProjectName,
         logoUrl = Config.LogoURL,
-        logoPosition = Config.LogoPosition,
+        -- logoPosition = Config.LogoPosition, -- Send table posibles positions in loadscreen
         enableMusic = Config.EnableMusic,
         youtubeVideoIds = Config.YouTubeVideoID,
         initialVolume = Config.InitialVolume,

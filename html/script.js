@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     let CONFIG = {
         logoUrl: "https://via.placeholder.com/150x50.png?text=Loading...",
+        // logoPosition: [],
         enableMusic: false,
         youtubeVideoIds: [],
         currentVideoIndex: 0,
@@ -16,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Element References ---
     const logoElement = document.getElementById('logo');
-    // const logoContainer = document.getElementById('logo-container'); -- next step to posibles postions log in config
+    // const logoPosition = document.getElementById('logo-container'); -- next step to posibles postions log in config
     const messageText = document.getElementById('message-text');
     const handoverName = document.getElementById('handover-name');
     const handoverAddress = document.getElementById('handover-address');
