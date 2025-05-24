@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Element References ---
     const logoElement = document.getElementById('logo');
+    // const logoContainer = document.getElementById('logo-container'); -- next step to posibles postions log in config
     const messageText = document.getElementById('message-text');
     const handoverName = document.getElementById('handover-name');
     const handoverAddress = document.getElementById('handover-address');
@@ -49,7 +50,19 @@ document.addEventListener('DOMContentLoaded', () => {
     let activeBgDiv = bgImage1;
     let inactiveBgDiv = bgImage2;
     let bgInterval = null;
+    // let loadingAt100Percent = false;
+    // let canCloseLoadingFlag = false;
     const BG_CHANGE_INTERVAL = 10000; // ms
+
+    /* function trySendLoadingComplete() {
+        if (loadingAt100Percent && canCloseLoadingFlag) {
+            fetch(`https://${GetParentResourceName()}/loadingComplete`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({})
+            });
+        }
+    } */
 
     // --- Background Image Slideshow Functions ---
     function preloadImage(url) {
@@ -375,6 +388,7 @@ document.addEventListener('DOMContentLoaded', () => {
         musicShouldBePlaying = true;
         updateMusicIcons();
     }
+
     function previousMusic() {
         CONFIG.currentVideoIndex = (CONFIG.currentVideoIndex - 1 + CONFIG.youtubeVideoIds.length) % CONFIG.youtubeVideoIds.length;
         player.loadVideoById(CONFIG.youtubeVideoIds[CONFIG.currentVideoIndex]);
@@ -395,6 +409,7 @@ document.addEventListener('DOMContentLoaded', () => {
         pauseIcon.addEventListener('click', toggleMusic);
         nextIcon.addEventListener('click', nextMusic);
     }
+
     if (volumeSlider) {
         volumeSlider.addEventListener('input', handleVolumeChange);
     }
@@ -407,18 +422,30 @@ document.addEventListener('DOMContentLoaded', () => {
         let totalInitFuncCount = 0;
 
         switch (data.eventName) {
+            /* case 'canCloseLoading':
+                    // Aquí activamos una bandera para que se pueda cerrar
+                    canCloseLoadingFlag = true;
+                    trySendLoadingComplete();
+                break; */
             case 'loadProgress':
                 if (loadingBar && data.loadFraction !== undefined) {
                     const percentage = Math.round(data.loadFraction * 100);
                     loadingBar.value = data.loadFraction;
+
                     if(progressPercentage) progressPercentage.textContent = `${percentage}%`;
                     let statusMsg = "Initializing...";
                     if (percentage < 10) statusMsg = "Establishing connection...";
                     else if (percentage < 30) statusMsg = "Requesting assets...";
                     else if (percentage < 70) statusMsg = "Loading game data...";
                     else if (percentage < 95) statusMsg = "Initializing scripts...";
-                    else statusMsg = "Finalizing setup...";
+                    else if (percentage < 99) statusMsg = "Finalizing setup..."; 
+                    else statusMsg = "Finalizing...";
                     if(statusText) statusText.textContent = statusMsg;
+                    // add exit and load multicharacter
+                    /* if (percentage === 100) {
+                        loadingAt100Percent = true;
+                        trySendLoadingComplete();
+                    } */
                 }
                 break;
             case 'onLogLine':
@@ -454,6 +481,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 break;
             case 'endInitFunction':
                 if(logText) logText.innerText = `Finished invoking ${data.type} functions.`;
+                    
                 break;
             default:
                 break;
