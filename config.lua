@@ -1,6 +1,7 @@
 Config = {}
 
-Config.LogoURL = "https://cdn2.steamgriddb.com/icon/eb06b9db06012a7a4179b8f3cb5384d3/32/256x256.png?text=Your+Logo+Here" -- redm logo, replace
+Config.LogoURL = "nui://basic_loadscreen/html/El_bueno.gif" -- redm logo img, replace
+-- Config.LogoURL = "https://cdn2.steamgriddb.com/icon/eb06b9db06012a7a4179b8f3cb5384d3/32/256x256.png?text=Your+Logo+Here" -- redm logo, replace
 -- Config.LogoPosition = {'bottom-left' , 'bottom-center', 'bottom-right'} -- wip
 
 Config.EnableMusic = true
