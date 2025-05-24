@@ -136,6 +136,7 @@ AddEventHandler('playerConnecting', function(playerName, setKickReason, deferral
         playerName = connectingPlayerName,
         serverName = serverProjectName,
         logoUrl = Config.LogoURL,
+        -- logoPosition = Config.LogoPosition, -- Send table posibles positions in loadscreen
         enableMusic = Config.EnableMusic,
         youtubeVideoIds = Config.YouTubeVideoID,
         initialVolume = Config.InitialVolume,
@@ -147,5 +148,8 @@ AddEventHandler('playerConnecting', function(playerName, setKickReason, deferral
         backgroundImageUrls = backgroundImageUrlList -- Send the list of URLs
     }
 
+    -- TriggerClientEvent('basic_loadscreen:client:startLoading', source, true)
+
     deferrals.handover(handoverData)
 end)
+

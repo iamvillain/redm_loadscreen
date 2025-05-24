@@ -37,14 +37,21 @@ body {
 
 #music-controls {
     position: absolute;
-    top: 20px;
-    right: 25px;
+    bottom: 96px;
+    left: 25px;
+    
+    clip-path: polygon(
+        10px 0%, 100% 0%, 100% calc(100% - 10px),
+        calc(100% - 10px) 100%, 0% 100%, 0% 10px
+    );
+
+    max-width: 40%;
+    min-width: 300px;
     display: flex;
     align-items: center;
     gap: 15px;
     background-color: rgba(0, 0, 0, 0.4);
     padding: 8px 15px;
-    border-radius: 5px;
     z-index: 100;
 }
 
@@ -89,25 +96,37 @@ body {
     vertical-align: middle;
 }
 
-.logo-music-below {
-    display: block;
-    margin-top: 30px;
-    max-height: 200px;
-}
-
 #handover-info {
     position: absolute;
-    top: 20px;
+    /*top: 20px;*/
+    bottom: 146px;
     left: 25px;
+    
+    clip-path: polygon(
+        10px 0%, 100% 0%, 100% calc(100% - 10px),
+        calc(100% - 10px) 100%, 0% 100%, 0% 10px
+    );
     background-color: rgba(0, 0, 0, 0.4);
     padding: 10px 15px;
-    border-radius: 5px;
     font-size: 0.9em;
-    max-width: 300px;
+    max-width: 40%;
+    min-width: 300px;
     z-index: 90;
+
 }
+
+#logo { 
+    max-height: 250px;
+    max-width: 100%;
+    min-width: 100px;
+    min-height: 100px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    object-fit: contain;
+}
+
 #handover-info p { margin-bottom: 5px; }
-#handover-info strong { color: #e0c0a0; }
+#handover-info strong { color: #e0c0a0; font-weight: 700; }
 #handover-info span { color: #ccc; }
 
 .loading-container {
@@ -117,31 +136,24 @@ body {
     justify-content: center;
     text-align: center;
     z-index: 50;
-    margin-top: 25%;
-}
-
-#logo {
-    max-width: 400px;
-    max-height: 200px;
-    margin-bottom: 30px;
-    object-fit: contain;
+    margin-top: 44%;
 }
 
 #random-messages {
-    margin-top: 20px;
     background-color: rgba(0, 0, 0, 0.3);
     clip-path: polygon(
         10px 0%, 100% 0%, 100% calc(100% - 10px),
         calc(100% - 10px) 100%, 0% 100%, 0% 10px
     );
     padding: 8px 15px;
-    border-radius: 4px;
     min-width: 250px;
-    max-width: 600px;
+    max-width: 800px;
 }
+
 #message-text {
     font-size: 1.1em;
     font-style: italic;
+    font-weight: bold;
     color: #ddd;
     transition: opacity 0.5s ease-in-out;
     text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
@@ -155,8 +167,8 @@ body {
     transform: translateX(-50%);
     width: 80%;
     clip-path: polygon(
-        30px 0%, 100% 0%, 100% calc(100% - 15px),
-        calc(100% - 15px) 100%, 0% 100%, 0% 30px
+        20px 0%, 100% 0%, 100% calc(100% - 40px),
+        calc(100% - 40px) 100%, 0% 100%, 0% 20px
     );
     max-width: 800px;
     text-align: center;
@@ -170,7 +182,7 @@ body {
     text-transform: uppercase;
     letter-spacing: 1px;
     color: #aaa;
-    margin-bottom: 8px;
+    margin-bottom: 9px;
 }
 
 #loading-bar {
@@ -178,48 +190,49 @@ body {
     height: 15px;
     appearance: none;
     clip-path: polygon(
-        8px 0%, 100% 0%, 100% calc(100% - 0px),
-        calc(100% - 0px) 100%, 0% 100%, 0% 8px
+        5px 0%, 100% 0%, 100% calc(100% - 5px),
+        calc(100% - 5px) 100%, 0% 100%, 0% 5px
     );
-    border: 1px solid #ffee58;
-    border-bottom: 1px solid #ffd97d;
+    border: 1px solid #e0c0a0;
+    border-bottom: 1px solid #e0c0a0;
     overflow: hidden;
 }
+
 #loading-bar::-webkit-progress-bar {
     background-color: #333;
-    border-radius: 8px;
 }
 #loading-bar::-webkit-progress-value {
     background-color: #b8860b;
-    border-radius: 8px;
     transition: width 0.2s ease-out;
 }
 #loading-bar::-moz-progress-bar {
     background-color: #b8860b;
-    border-radius: 8px;
     transition: width 0.2s ease-out;
 }
 
 #progress-percentage {
     font-size: 0.9em;
     color: #ccc;
-    margin-top: 5px;
-    display: block;
 }
 
 #status-log-container {
     position: absolute;
     bottom: 20px;
     left: 25px;
+    
+    clip-path: polygon(
+        10px 0%, 100% 0%, 100% calc(100% - 10px),
+        calc(100% - 10px) 100%, 0% 100%, 0% 10px
+    );
+
     background-color: rgba(0, 0, 0, 0.5);
     padding: 10px 15px;
-    border-radius: 5px;
     font-size: 0.85em;
     max-width: 40%;
     min-width: 300px;
     z-index: 90;
     line-height: 1.4;
-    max-height: 150px;
+    max-height: 250px;
     overflow: hidden;
 }
 
@@ -229,13 +242,18 @@ body {
 
 #changelog-container {
     position: absolute;
-    left: 25px;
-    top: 50%;
-    transform: translateY(-50%);
+    right: 25px;
+    bottom: 20px;
+    /*transform: translateY(-50%);*/
     width: 350px;
-    max-height: 250px;
-    background-color: rgba(0, 0, 0, 0.6);
-    border-radius: 5px;
+    
+    clip-path: polygon(
+        10px 0%, 100% 0%, 100% calc(100% - 10px),
+        calc(100% - 10px) 100%, 0% 100%, 0% 10px
+    );
+
+    max-height: 463px;
+    min-height: 68px;
     padding: 15px;
     z-index: 95;
     display: flex; /* This is handled by JS, but good default */
@@ -243,12 +261,18 @@ body {
     overflow: hidden;
     color: #ccc;
     font-size: 0.9em;
+    background-color: rgba(0, 0, 0, 0.3);
     box-shadow: 0 2px 10px rgba(0,0,0,0.3);
     /* display: none; is handled by JS */
 }
 
+#changelog-container:hover {
+    background-color: rgba(0, 0, 0, 0.6);
+    max-height: 463px;
+}
+
 #changelog-title {
-    margin-bottom: 10px;
+    margin-bottom: 8px;
     padding-bottom: 8px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
     font-size: 1.1em;

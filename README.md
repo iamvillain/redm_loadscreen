@@ -15,4 +15,5 @@ A simple RedM loading screen that uses the native method introduced in May 2024 
 
 ## Contributors
 
-*   Sadicius
+*   Sadicius by example
+![image](https://github.com/user-attachments/assets/546b4a59-fc38-416f-9c8d-8eb721c8a726)
