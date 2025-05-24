@@ -6,6 +6,8 @@ Config.LogoURL = "https://cdn2.steamgriddb.com/icon/eb06b9db06012a7a4179b8f3cb53
 Config.EnableMusic = true
 
 Config.YouTubeVideoID = {
+    'c02vJ0YA7TU',
+    'vSbEC6AHHYc',
     'raY_mDpQ4Oo',
 }
 
