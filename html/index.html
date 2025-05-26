@@ -31,13 +31,13 @@
 
     <!-- Handover Info -->
     <div id="handover-info">
+        <img id="logo" src="" alt="Server Logo" style="display: none">
         <p>Welcome, <strong id="handover-name">Player</strong>!</p>
         <p>Connecting to: <strong id="handover-address">Server Address</strong></p>
     </div>
 
     <!-- Main Loading Content -->
     <div class="loading-container">
-        <img id="logo" src="" alt="Server Logo" style="display: none;">
         <div id="random-messages">
             <p id="message-text">Loading environment...</p>
         </div>
@@ -45,9 +45,8 @@
 
     <!-- Progress Bar -->
     <div class="progress-container">
-         <div id="progress-label">Overall Progress</div>
          <progress id="loading-bar" value="0" max="1"></progress>
-         <span id="progress-percentage">0%</span>
+         <div id="progress-label">Overall Progress <span id="progress-percentage">0%</span></div>
     </div>
 
     <!-- Status Log -->
