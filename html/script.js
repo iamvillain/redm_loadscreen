@@ -54,7 +54,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const BG_CHANGE_INTERVAL = 10000; // ms
     let isLoadFractionComplete = false;
     let hasFinishedDetailsLog = false;
-    let hasLoadedRedmIpls = false;
 
     // --- Background Image Slideshow Functions ---
     function preloadImage(url) {
@@ -418,50 +417,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (loadingBar && data.loadFraction !== undefined) {
                     const percentage = Math.round(data.loadFraction * 100);
                     loadingBar.value = data.loadFraction;
-                    if (!hasLoadedRedmIpls) {
-                        loadingBar.value = data.loadFraction;
-                        if (progressPercentage) progressPercentage.textContent = `${percentage}%`;
-                    }
+
                     if(progressPercentage) progressPercentage.textContent = `${percentage}%`;
                     let statusMsg = "Initializing...";
                     if (percentage < 10) statusMsg = "Establishing connection...";
                     else if (percentage < 30) statusMsg = "Requesting assets...";
                     else if (percentage < 70) statusMsg = "Loading game data...";
                     else if (percentage < 95) statusMsg = "Initializing scripts...";
+                    else if (percentage < 99) statusMsg = "Finalizing scripts...";
                     else statusMsg = "Finalizing  setup...";
                     if(statusText) statusText.textContent = statusMsg;
-                    // if (percentage >= 100) {}
-                    if (data.name === 'redm-ipls') {
-                        hasLoadedRedmIpls = true;
-
-                        // Forzar progreso a 100%
-                        if (loadingBar) loadingBar.value = 1;
-                        if (progressPercentage) progressPercentage.textContent = `100%`;
-                        if (statusText) statusText.textContent = "Done!";
-                    }
-                     if (data.eventName === 'SHUTDOWN_LOADING_SCREEN') {
-                        console.log("Recibido SHUTDOWN_LOADING_SCREEN");
+                    if (data.eventName === 'SHUTDOWN_LOADING_SCREEN') {
                         isLoadFractionComplete = true;
-
-                        if (hasLoadedRedmIpls && hasFinishedDetailsLog) {
-                            const loadingScreen = document.getElementById('loading-screen');
-                            if (loadingScreen) {
-                                loadingScreen.style.opacity = 0;
-                                setTimeout(() => {
-                                    loadingScreen.style.display = 'none';
-                                }, 1000);
-                            }
-
-                            try {
-                                fetch(`https://${GetParentResourceName()}/loadingComplete`, {
-                                    method: 'POST',
-                                    headers: { 'Content-Type': 'application/json' },
-                                    body: JSON.stringify({})
-                                }, 1000);
-                            } catch (e) {
-                                console.warn("No se pudo enviar 'loadingComplete':", e);
-                            }
-                        }
                     }
                 }
                 break;
@@ -506,7 +473,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             loadingScreen.style.opacity = 0;
                             setTimeout(() => {
                                 loadingScreen.style.display = 'none';
-                            }, 1000);
+                            }, 3000);
                         }
 
                         try {

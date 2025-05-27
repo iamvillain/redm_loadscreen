@@ -1,8 +1,4 @@
 RegisterNUICallback("loadingComplete", function(_, cb)
     ShutdownLoadingScreenNui()
-    Wait(100)
-    DoScreenFadeOut(250)
-    Wait(1000)
-    DoScreenFadeIn(1000)
     cb('ok')
 end)
