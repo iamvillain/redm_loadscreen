@@ -433,7 +433,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 break;
             case 'onLogLine':
-                if (logText && data.message) logText.innerText = data.message;                
+                if (logText && data.message) logText.innerText = data.message;
                 break;
             case 'startDataFileEntries':
                 totalDataFileCount = data.count;
